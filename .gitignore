@@ -1,0 +1,8 @@
+.DS_Store
+
+build/
+npm-debug.log
+package.json
+node_modules/
+config.js
+Gruntfile.js
