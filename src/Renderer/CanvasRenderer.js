@@ -3,6 +3,13 @@ define(function() {
 	var SIN_THIRTY = Math.sin(Math.PI / 6),
 		COS_THIRTY = Math.cos(Math.PI / 6),
 
+		/**
+		 * Converts a hex string into an rgba transparent string
+		 *
+		 * @param {string} rgbHex the hex color to transparentize
+		 * @param {number} a The alpha value
+		 * @return {string} The transparent string
+		 */
 		transparentize = function(rgbHex, a) {
 
 			var m = rgbHex.substring(1).match('([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})'),
@@ -13,6 +20,17 @@ define(function() {
 			return 'rgba('+r+','+g+','+b+','+a+')';
 		},
 
+	/**
+	 * Creates an instance of a CanvasRenderer.
+	 *
+	 * @constructor
+	 * @this {CanvasRenderer}
+	 * @param {DOMElement} canvas The canvas element to render to
+	 * @param {number} hypotenuseLength The length of the hypotenuse for drawing diamonds
+	 * @param {string} leftColor The hex color of the left diamond
+	 * @param {string} topColor The hex color of the top diamond
+	 * @param {string} rightColor The hex color of the right diamond
+	 */
 	CanvasRenderer = function(canvas, hypotenuseLength, leftColor, topColor, rightColor) {
 
 		this.canvas = canvas;
@@ -33,7 +51,12 @@ define(function() {
 
 	};
 	CanvasRenderer.prototype = {
-
+		/**
+		 * Sets the desired hypotenuse length for each rendered diamond.
+		 *
+		 * @this {CanvasRenderer}
+		 * @param {string} hypotenuseLength
+		 */
 		updateRenderingData: function(hypotenuseLength) {
 			this.hypotenuseLength = hypotenuseLength;
 			this.shortLength      = hypotenuseLength * SIN_THIRTY;
@@ -58,6 +81,15 @@ define(function() {
 			this.drawCube(ctx, 0,  this.shortLength + this.longLength + 2, false);
 		},
 
+		/**
+		 * Given voxel indices, projects them into 2 dimensional space
+		 *
+		 * @this {CanvasRenderer}
+		 * @param {number} x the x index
+		 * @param {number} y the y index
+		 * @param {number} z the z index
+		 * @param {origin} the point at which <0,0> should be rendered.
+		 */
 		project: function(x, y, z, origin) {
 			x = parseInt(x, 10);
 			y = parseInt(y, 10);
@@ -69,41 +101,75 @@ define(function() {
 			};
 		},
 
+		/**
+		 * Renders a cube into the provided context
+		 *
+		 * @this {CanvasRenderer}
+		 * @param {CanvasRenderingContext2D} context The context in which to render
+		 * @param {number} x The x position of the cube
+		 * @param {number} y The y position of the cube
+		 * @param {Boolean} transparent Whether or not to draw the cube transparently
+		 */
 		drawCube: function(context, x, y, transparent) {
 			var colors = transparent ? this.transparentColors : this.colors;
 
-			this.drawDiamondWithIndices(
+			this.drawDiamond(
 				context, x, y,
-				0, 1, 4, 5, colors.left);
+				this.offsets[0],
+				this.offsets[1],
+				this.offsets[4],
+				this.offsets[5],
+				colors.left
+			);
 
-			this.drawDiamondWithIndices(
+			this.drawDiamond(
 				context, x, y,
-				1, 2, 3, 4, colors.right);
+				this.offsets[1],
+				this.offsets[2],
+				this.offsets[3],
+				this.offsets[4],
+				colors.right
+			);
 
-			this.drawDiamondWithIndices(
+			this.drawDiamond(
 				context, x, y,
-				3, 4, 5, 6, colors.top);
+				this.offsets[3],
+				this.offsets[4],
+				this.offsets[5],
+				this.offsets[6],
+				colors.top
+			);
 
 		},
 
+		/**
+		 * Draws the prerendered cube onto the canvas
+		 *
+		 * @this {CanvasRenderer}
+		 * @param {CanvasRenderingContext2D} context The context in which to render
+		 * @param {number} x The x position of the cube
+		 * @param {number} y The y position of the cube
+		 * @param {Boolean} transparent Whether or not to draw the cube transparently
+		 *
+		 * @todo  Implement transparent rendering
+		 */
 		drawCubePrerendered: function(context, x, y, transparent) {
 			context.drawImage(this.hexCanvas, Math.round(x), Math.round(y) - 18);
 		},
 
-		drawDiamondWithIndices: function(context, x, y, index1, index2, index3, index4, color) {
-
-			this.drawDiamondWithOffset(
-				context,
-				x, y,
-				this.offsets[index1],
-				this.offsets[index2],
-				this.offsets[index3],
-				this.offsets[index4],
-				color
-			);
-		},
-
-		drawDiamondWithOffset: function(context, x, y, offset1, offset2, offset3, offset4, color) {
+		/**
+		 * Draws a diamond into the provided context
+		 *
+		 * @param  {CanvasRenderingContext2D} context The context in which to render
+		 * @param  {number} x       The x position of the diamond
+		 * @param  {number} y       The y position of the diamond
+		 * @param  {number} offset1 The first point offset from the position
+		 * @param  {number} offset2 The second point offset from the position
+		 * @param  {number} offset3 The third point offset from the position
+		 * @param  {number} offset4 The fourth point offset from the position
+		 * @param  {string} color   The color to render
+		 */
+		drawDiamond: function(context, x, y, offset1, offset2, offset3, offset4, color) {
 
 			context.fillStyle = color;
 
@@ -118,25 +184,46 @@ define(function() {
 			context.fill();
 		},
 
-		getCanvasSize:  function(totalX, totalY, totalZ) {
+		/**
+		 * Given the size of a result matrix, gets size information
+		 *
+		 * @param  {number} width The width of the result matrix
+		 * @param  {number} depth The depth of the result matrix
+		 * @param  {number} height The height of the result matrix
+		 * @return {mixed}        The width and height of the canvas, as well as the center.
+		 */
+		getCanvasSize:  function(width, depth, height) {
 
-			var width = (totalX + totalY) * this.longLength,
-				height = (totalZ * this.hypotenuseLength) + ((totalX + totalY) * this.shortLength);
+			var width = (width + depth) * this.longLength,
+				height = (height * this.hypotenuseLength) + ((width + depth) * this.shortLength);
 
 			return {
 				width: width,
 				height: height,
 				origin: {
 					x: 0,
-					y: height - (totalY * this.shortLength)
+					y: height - (depth * this.shortLength)
 				}
 			};
 		},
 
+		/**
+		 * Clears the canvas
+		 *
+		 * @this {CanvasRenderer}
+		 * @todo Implement
+		 */
 		clearCanvas: function() {
 
 		},
 
+		/**
+		 * Renders the shape results onto the canvas element.
+		 *
+		 * @this {CanvasRenderer}
+		 * @param {Boolean[][][]} shape A 3d matrix of booleans
+		 * @param {number} highlightLevel the level at which the levels above disappear
+		 */
 		render: function(shape, highlightLevel) {
 			if (highlightLevel == undefined) {
 				highlightLevel = -1;
@@ -239,14 +326,28 @@ define(function() {
 		}
 	};
 
-	CanvasRenderer.getHypotenuseSizeFromWidth = function(totalX, totalY, totalZ, canvasWidth) {
-
-		return (canvasWidth / (totalX + totalY)) / COS_THIRTY;
+	/**
+	 * Gets a hypotenuse size given a canvas width and a 3d matrix size
+	 *
+	 * @param {number} width The width of the 3d matrix
+	 * @param {number} depth The depth of the 3d matrix
+	 * @param {number} height The depth of the 3d matrix
+	 * @param {number} canvasWidth The width of the canvas in pixels
+	 */
+	CanvasRenderer.getHypotenuseSizeFromWidth = function(width, depth, height, canvasWidth) {
+		return (canvasWidth / (width + depth)) / COS_THIRTY;
 	};
 
-	CanvasRenderer.getHypotenuseSizeFromHeight = function(totalX, totalY, totalZ, canvasHeight) {
-
-		return (canvasHeight / (totalZ + (( totalX + totalY) * SIN_THIRTY)));
+	/**
+	 * Gets a hypotenuse size given a canvas height and a 3d matrix size
+	 *
+	 * @param {number} width The width of the 3d matrix
+	 * @param {number} depth The depth of the 3d matrix
+	 * @param {number} height The depth of the 3d matrix
+	 * @param {number} canvasHeight The height of the canvas in pixels
+	 */
+	CanvasRenderer.getHypotenuseSizeFromHeight = function(width, depth, height, canvasHeight) {
+		return (canvasHeight / (height + (( width + depth) * SIN_THIRTY)));
 	};
 
 	return CanvasRenderer;

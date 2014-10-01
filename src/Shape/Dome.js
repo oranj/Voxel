@@ -1,15 +1,31 @@
 define(['vox/Shape/BaseShape'], function(BaseShape) {
 
-	var Dome = function(w, d, h, th) {
-		BaseShape.call(this, w, d, h, th);
+	/**
+	 * Constructs a Dome object
+	 *
+	 * @constructor
+	 * @param {number} width         The width of the shape
+	 * @param {number} depth         The depth of the shape
+	 * @param {number} height         The height of the shape
+	 * @param {number|null} thickness The thickness of the shape, or undefined if hollow
+	 */
+	var Dome = function(width, depth, height, thickness) {
+		BaseShape.call(this, width, depth, height, thickness);
 
 		var minDimension = Math.min(this.width, this.depth, this.height * 2);
 
 		this.minRadius = minDimension / 2;
 		this.adjustedMinRadius = (minDimension - 1) / 2;
 	};
+
 	Dome.prototype = Object.create(BaseShape.prototype);
-	Dome.prototype.generate3d = function(radius) {
+	/**
+	 * Generates a 3d matrix of booleans indicating if the cell is occupied
+	 *
+	 * @this {Dome}
+	 * @return {Boolean[][][]}
+	 */
+	Dome.prototype.generate3d = function() {
 		var out = [],
 			zRadius = this.height - 0.5,
 			realZRadius = this.height,

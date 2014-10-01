@@ -1,7 +1,19 @@
 define(function() {
 
+	/**
+	 * Constructs a new ConsoleRenderer object
+	 *
+	 * @constructor
+	 * @this {ConsoleRenderer}
+	 */
 	var ConsoleRenderer = function() {};
 
+	/**
+	 * Renders a 3d matrix to the console
+	 *
+	 * @this {ConsoleRenderer}
+	 * @param {Boolean[][][]} matrix
+	 */
 	ConsoleRenderer.prototype.render = function(matrix) {
 		var z, y, x, str = '';
 		for (z = 0; z < matrix.length; z++) {

@@ -1,7 +1,16 @@
 define(['vox/Shape/BaseShape'], function(BaseShape) {
 
-	var Sphere = function(w, d, h, thickness) {
-		BaseShape.call(this, w, d, h, thickness);
+	/**
+	 * Constructs a Sphere object
+	 *
+	 * @constructor
+	 * @param {number} width         The width of the shape
+	 * @param {number} depth         The depth of the shape
+	 * @param {number} height         The height of the shape
+	 * @param {number|null} thickness The thickness of the shape, or undefined if hollow
+	 */
+	var Sphere = function(width, depth, height, thickness) {
+		BaseShape.call(this, width, depth, height, thickness);
 
 		var minDimension = Math.min(this.width, this.depth, this.height);
 
@@ -12,6 +21,12 @@ define(['vox/Shape/BaseShape'], function(BaseShape) {
 
 	Sphere.prototype = Object.create(BaseShape.prototype);
 
+	/**
+	 * Generates a 3d matrix of booleans indicating if the cell is occupied
+	 *
+	 * @this {Sphere}
+	 * @return {Boolean[][][]}
+	 */
 	Sphere.prototype.generate3d = function() {
 		var out = [],
 			zRadius = (this.height - 1) / 2,
