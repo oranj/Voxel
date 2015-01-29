@@ -1,6 +1,6 @@
 {
 	"name": "Voxel",
-	"version": "1.0",
+	"version": "1.0.0",
 	"description": "3D Voxel generating library",
 	"author": "Ray Minge <ray@rayminge.com>"
 }
