@@ -2,5 +2,11 @@
 	"name": "Voxel",
 	"version": "1.0.0",
 	"description": "3D Voxel generating library",
-	"author": "Ray Minge <ray@rayminge.com>"
+	"author": "Ray Minge <ray@rayminge.com>",
+	"dependencies": {
+		"grunt": "~0.4.5",
+		"grunt-jslint": "~1.1.11",
+		"grunt-digestif": "~0.1.0",
+		"grunt-contrib-requirejs": "~0.4.0"
+	}
 }
