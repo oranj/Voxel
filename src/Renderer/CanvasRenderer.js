@@ -82,9 +82,6 @@ define(function() {
 			this.hexCanvasTrans.setAttribute('width', Math.ceil(2 * this.longLength));
 			this.hexCanvasTrans.setAttribute('height', Math.ceil(2 * this.longLength) + 3);
 
-			document.body.appendChild(this.hexCanvasTrans);
-			document.body.appendChild(this.hexCanvas);
-
 			var ctx = this.hexCanvas.getContext('2d');
 			this.drawCube(ctx, 0, this.shortLength + this.longLength + 2, false);
 
