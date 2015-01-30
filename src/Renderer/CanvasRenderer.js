@@ -1,5 +1,7 @@
 define(function() {
 
+	"use strict";
+
 	var SIN_THIRTY = Math.sin(Math.PI / 6),
 		COS_THIRTY = Math.cos(Math.PI / 6),
 
@@ -45,7 +47,7 @@ define(function() {
 			left: transparentize(leftColor, 0.2),
 			top: transparentize(topColor, 0.2),
 			right: transparentize(rightColor, 0.2)
-		}
+		};
 
 		this.updateRenderingData(hypotenuseLength);
 
@@ -150,8 +152,6 @@ define(function() {
 		 * @param {number} x The x position of the cube
 		 * @param {number} y The y position of the cube
 		 * @param {Boolean} transparent Whether or not to draw the cube transparently
-		 *
-		 * @todo  Implement transparent rendering
 		 */
 		drawCubePrerendered: function(context, x, y, transparent) {
 			context.drawImage(this.hexCanvas, Math.round(x), Math.round(y) - 18);
@@ -194,12 +194,12 @@ define(function() {
 		 */
 		getCanvasSize:  function(width, depth, height) {
 
-			var width = (width + depth) * this.longLength,
-				height = (height * this.hypotenuseLength) + ((width + depth) * this.shortLength);
+			var canvasWidth = (width + depth) * this.longLength,
+				canvasHeight = (height * this.hypotenuseLength) + ((width + depth) * this.shortLength);
 
 			return {
-				width: width,
-				height: height,
+				width: canvasWidth,
+				height: canvasHeight,
 				origin: {
 					x: 0,
 					y: height - (depth * this.shortLength)
@@ -214,7 +214,7 @@ define(function() {
 		 * @todo Implement
 		 */
 		clearCanvas: function() {
-
+			return undefined;
 		},
 
 		/**
@@ -229,51 +229,47 @@ define(function() {
 				highlightLevel = -1;
 			}
 
-			var totalX = shape[0][0].length;
-				totalY = shape[0].length;
-				totalZ = shape.length;
-
-			var size = this.getCanvasSize(
-				totalX,
-				totalY,
-				totalZ
-			);
+			var totalX = shape[0][0].length,
+				totalY = shape[0].length,
+				totalZ = shape.length,
+				i, j,
+				size = this.getCanvasSize(
+					totalX,
+					totalY,
+					totalZ
+				),
+				context,
+				isCulled = {},
+				maxPlanes = totalZ + totalX + totalY,
+				planePos = [],
+				startZ,
+				xSub,
+				p, pos,
+				z, y, x, x2, min, key, plane;
 
 			this.canvas.setAttribute('style', 'max-width:100%');
 			this.canvas.setAttribute('width', size.width +'px');
 			this.canvas.setAttribute('height', size.height +'px');
 
-			var context = this.canvas.getContext('2d');
+			context = this.canvas.getContext('2d');
 
-			var maxDistance = Math.sqrt(
-				Math.pow(totalX, 2) +
-				Math.pow(totalY, 2) +
-				Math.pow(totalZ, 2)
-			);
-
-			var isCulled = {};
-			var maxPlanes = totalZ + totalX + totalY;
-
-			var planePos = [];
-			var highlights = [];
-
-			for (var i = 0; i < maxPlanes; i++) {
+			for (i = 0; i < maxPlanes; i++) {
 				planePos.push([]);
 			}
 
-			var startZ = highlightLevel >= 0 ? highlightLevel : totalZ - 1;
+			startZ = highlightLevel >= 0 ? highlightLevel : totalZ - 1;
 
-			var xSub = totalX - 1;
+			xSub = totalX - 1;
 
-			for (var z = startZ; z >= 0; z--) {
-				for (var y = 0; y < totalY; y++) {
-					for (var x = xSub; x >= 0; x--) {
+			for (z = startZ; z >= 0; z--) {
+				for (y = 0; y < totalY; y++) {
+					for (x = xSub; x >= 0; x--) {
 						try {
 							if (shape[z][y][x]) {
-								var _x = xSub - x,
-									min = Math.min(_x, y, z),
-									key = [_x - min, y - min, z - min].join(':'),
-									plane = (_x + y + z);
+								x2 = xSub - x;
+								min = Math.min(x2, y, z);
+								key = [x2 - min, y - min, z - min].join(':');
+								plane = (x2 + y + z);
 
 								if ((highlightLevel >= 0 && z <= highlightLevel) || (highlightLevel <= 0)) {
 
@@ -295,12 +291,11 @@ define(function() {
 				}
 			}
 
-			var count = 0;
-			for (var i = 0; i < maxPlanes; i++) {
-				for (var j in planePos[i]) {
+			for (i = 0; i < maxPlanes; i++) {
+				for (j in planePos[i]) {
 					if (planePos[i].hasOwnProperty(j)) {
-						var p = planePos[i][j],
-							pos = this.project(p.x, p.y, p.z, size.origin);
+						p = planePos[i][j];
+						pos = this.project(p.x, p.y, p.z, size.origin);
 
 						this.drawCubePrerendered(context, pos.x, pos.y, false);
 					}
@@ -309,12 +304,12 @@ define(function() {
 
 			if (highlightLevel >= 0 && highlightLevel < totalZ) {
 
-				var z = highlightLevel + 1;
-				for (var y = 0; y < totalY; y++) {
-					for (var x = totalX - 1; x >= 0; x--) {
+				z = highlightLevel + 1;
+				for (y = 0; y < totalY; y++) {
+					for (x = totalX - 1; x >= 0; x--) {
 						try {
 							if (shape[z][y][x]) {
-								var pos = this.project(x, y, z, size.origin);
+								pos = this.project(x, y, z, size.origin);
 								this.drawCubePrerendered(pos.x, pos.y, context, true);
 							}
 						} catch (ex) {

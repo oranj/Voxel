@@ -1,5 +1,7 @@
 define(['vox/Shape/BaseShape', 'vox/General/BezierFunction', 'vox/General/BinomialCoefficient'], function(BaseShape, BezierFunction, BinomialCoefficient) {
 
+	"use strict";
+
 	/**
 	 * Constructs a shape that can generate a shape from bezier control points
 	 *
@@ -61,7 +63,12 @@ define(['vox/Shape/BaseShape', 'vox/General/BezierFunction', 'vox/General/Binomi
 	 */
 	Bezier.prototype.generate3d = function() {
 
-		var granularity = 1;
+		var granularity = 1,
+			samples = {},
+			out = [],
+			radius,
+			i, time, p, px;
+
 		if (this.axis == 'x') {
 			granularity = this.width;
 		} else if (this.axis == 'y') {
@@ -70,12 +77,12 @@ define(['vox/Shape/BaseShape', 'vox/General/BezierFunction', 'vox/General/Binomi
 			granularity = this.height;
 		}
 
-		var samples = {};
-		for (var i = 0; i < (10 * granularity); i++) {
+		samples = {};
+		for (i = 0; i < (10 * granularity); i++) {
 
-			var time = i / (10 * granularity),
-				p = this.getPoint(time),
-				px = Math.floor(p.x * granularity);
+			time = i / (10 * granularity);
+			p = this.getPoint(time);
+			px = Math.floor(p.x * granularity);
 
 			if (! samples.hasOwnProperty(px)) {
 				samples[px] = p.y;
@@ -86,16 +93,15 @@ define(['vox/Shape/BaseShape', 'vox/General/BezierFunction', 'vox/General/Binomi
 
 		samples[0] = this.pointsY[0];
 
-		var out = [];
-		for (var i = 0; i < this.height; i++) {
-			var radius = samples[i] * this.minRadius;
+		for (i = 0; i < this.height; i++) {
+			radius = samples[i] * this.minRadius;
 
 			out.push(this.generateRotation(radius));
 		}
 
 		return out;
 
-	}
+	};
 
 	return Bezier;
 });

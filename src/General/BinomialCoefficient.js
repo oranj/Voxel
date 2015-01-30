@@ -1,11 +1,13 @@
 define(function() {
+	"use strict";
+
 	var cache = {},
 		/**
 		 * A function for determining binomial coefficients. Memoized for speed
 		 *
 		 * @constructor
 		 */
-		BinomialCoefficient = function() {};
+		BinomialCoefficient = function() { return undefined; };
 
 	/**
 	 * Gets the binomial coefficient using the recursive formula

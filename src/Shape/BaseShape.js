@@ -58,7 +58,7 @@ define(function() {
 				xRatio = xRadius / minRadius,
 				yRatio = yRadius / minRadius,
 
-				xP, yP, distance
+				xP, yP, distance, y, x;
 
 			for (y = -yRadius; y <= yRadius; y++) {
 				row = [];

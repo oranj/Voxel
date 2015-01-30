@@ -1,4 +1,5 @@
 define(['vox/Shape/BaseShape'], function(BaseShape) {
+	"use strict";
 
 	/**
 	 * Constructs a Sphere object

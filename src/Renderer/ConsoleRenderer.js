@@ -1,4 +1,5 @@
 define(function() {
+	"use strict";
 
 	/**
 	 * Constructs a new ConsoleRenderer object
@@ -6,7 +7,7 @@ define(function() {
 	 * @constructor
 	 * @this {ConsoleRenderer}
 	 */
-	var ConsoleRenderer = function() {};
+	var ConsoleRenderer = function() { return undefined; };
 
 	/**
 	 * Renders a 3d matrix to the console

@@ -1,4 +1,5 @@
 define(['vox/Shape/BaseShape'], function(BaseShape) {
+	"use strict";
 
 	/**
 	 * Constructs a Cone object
@@ -27,18 +28,12 @@ define(['vox/Shape/BaseShape'], function(BaseShape) {
 	Cone.prototype.generate3d = function(radius) {
 		var out = [],
 			zRadius = this.height - 0.5,
-			realZRadius = this.height,
 
-			zFactor = zRadius / this.adjustedMinRadius,
-
-			adjustedZ,
 			circleRadius,
-			zHeight, z, percent;
+			z, percent;
 
 		for (z = 0.5; z <= zRadius; z++) {
 
-			adjustedZ = Math.abs(z / zFactor);
-			zHeight = this.minRadius - adjustedZ;
 			percent = 1 - (z / this.height);
 
 			circleRadius = percent * this.minRadius;

@@ -1,4 +1,5 @@
 define(['vox/Shape/BaseShape'], function(BaseShape) {
+	"use strict";
 
 	/**
 	 * Constructs a Dome object
@@ -28,7 +29,6 @@ define(['vox/Shape/BaseShape'], function(BaseShape) {
 	Dome.prototype.generate3d = function() {
 		var out = [],
 			zRadius = this.height - 0.5,
-			realZRadius = this.height,
 
 			zFactor = zRadius / this.adjustedMinRadius,
 
