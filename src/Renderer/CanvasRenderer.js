@@ -74,13 +74,22 @@ define(function() {
 				{ x: this.longLength,     y: -3 * this.shortLength }
 			];
 
-
 			this.hexCanvas = document.createElement('canvas');
 			this.hexCanvas.setAttribute('width', Math.ceil(2 * this.longLength));
 			this.hexCanvas.setAttribute('height', Math.ceil(2 * this.longLength) + 3);
 
+			this.hexCanvasTrans = document.createElement('canvas');
+			this.hexCanvasTrans.setAttribute('width', Math.ceil(2 * this.longLength));
+			this.hexCanvasTrans.setAttribute('height', Math.ceil(2 * this.longLength) + 3);
+
+			document.body.appendChild(this.hexCanvasTrans);
+			document.body.appendChild(this.hexCanvas);
+
 			var ctx = this.hexCanvas.getContext('2d');
-			this.drawCube(ctx, 0,  this.shortLength + this.longLength + 2, false);
+			this.drawCube(ctx, 0, this.shortLength + this.longLength + 2, false);
+
+			ctx = this.hexCanvasTrans.getContext('2d');
+			this.drawCube(ctx, 0, this.shortLength + this.longLength + 2, true);
 		},
 
 		/**
@@ -154,7 +163,8 @@ define(function() {
 		 * @param {Boolean} transparent Whether or not to draw the cube transparently
 		 */
 		drawCubePrerendered: function(context, x, y, transparent) {
-			context.drawImage(this.hexCanvas, Math.round(x), Math.round(y) - 18);
+			var canvas = transparent ? this.hexCanvasTrans : this.hexCanvas;
+			context.drawImage(canvas, Math.round(x), Math.round(y) - 18);
 		},
 
 		/**
@@ -202,7 +212,7 @@ define(function() {
 				height: canvasHeight,
 				origin: {
 					x: 0,
-					y: height - (depth * this.shortLength)
+					y: canvasHeight - (depth * this.shortLength)
 				}
 			};
 		},
@@ -310,7 +320,7 @@ define(function() {
 						try {
 							if (shape[z][y][x]) {
 								pos = this.project(x, y, z, size.origin);
-								this.drawCubePrerendered(pos.x, pos.y, context, true);
+								this.drawCubePrerendered(context, pos.x, pos.y, true);
 							}
 						} catch (ex) {
 							console.error(ex.message);
