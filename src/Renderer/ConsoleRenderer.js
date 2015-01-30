@@ -27,8 +27,6 @@ define(function() {
 			}
 			console.log(str+"\n");
 		}
-		console.log(matrix);
-
 	};
 
 	return ConsoleRenderer;
