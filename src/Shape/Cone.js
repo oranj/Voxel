@@ -13,7 +13,7 @@ define(['vox/Shape/BaseShape'], function(BaseShape) {
 	var Cone = function(width, depth, height, thickness) {
 		BaseShape.call(this, width, depth, height, thickness);
 
-		var minDimension = Math.min(this.width, this.depth, this.height * 2);
+		var minDimension = Math.min(this.width, this.depth);
 
 		this.minRadius = minDimension / 2;
 		this.adjustedMinRadius = (minDimension - 1) / 2;

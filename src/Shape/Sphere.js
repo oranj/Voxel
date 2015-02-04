@@ -13,7 +13,7 @@ define(['vox/Shape/BaseShape'], function(BaseShape) {
 	var Sphere = function(width, depth, height, thickness) {
 		BaseShape.call(this, width, depth, height, thickness);
 
-		var minDimension = Math.min(this.width, this.depth, this.height);
+		var minDimension = Math.min(this.width, this.depth);
 
 		this.minRadius = minDimension / 2;
 		this.adjustedMinRadius = (minDimension - 1) / 2;
@@ -32,16 +32,17 @@ define(['vox/Shape/BaseShape'], function(BaseShape) {
 		var out = [],
 			zRadius = (this.height - 1) / 2,
 			realZRadius = this.height / 2,
-			zFactor = zRadius / this.adjustedMinRadius,
+			zFactor = realZRadius / this.adjustedMinRadius,
 
 			adjustedZ,
 			circleRadius,
 			zHeight, z;
 
 		for (z = -zRadius; z <= zRadius; z++) {
+
 			adjustedZ = Math.abs(z / zFactor);
-			zHeight = realZRadius - adjustedZ;
-			circleRadius = Math.sqrt(zHeight * (2 * this.minRadius - zHeight));
+			circleRadius = Math.sqrt(
+				Math.pow(this.adjustedMinRadius, 2) - Math.pow(Math.abs(adjustedZ), 2));
 
 			out.push(this.generateRotation(circleRadius));
 		}

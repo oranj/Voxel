@@ -13,7 +13,7 @@ define(['vox/Shape/BaseShape'], function(BaseShape) {
 	var Dome = function(width, depth, height, thickness) {
 		BaseShape.call(this, width, depth, height, thickness);
 
-		var minDimension = Math.min(this.width, this.depth, this.height * 2);
+		var minDimension = Math.min(this.width, this.depth);
 
 		this.minRadius = minDimension / 2;
 		this.adjustedMinRadius = (minDimension - 1) / 2;
@@ -28,7 +28,7 @@ define(['vox/Shape/BaseShape'], function(BaseShape) {
 	 */
 	Dome.prototype.generate3d = function() {
 		var out = [],
-			zRadius = this.height - 0.5,
+			zRadius = this.height,
 
 			zFactor = zRadius / this.adjustedMinRadius,
 
@@ -36,11 +36,13 @@ define(['vox/Shape/BaseShape'], function(BaseShape) {
 			circleRadius,
 			zHeight, z;
 
-		for (z = 0.5; z <= zRadius; z++) {
+		for (z = 0.5; z < zRadius; z++) {
 
 			adjustedZ = Math.abs(z / zFactor);
-			zHeight = this.minRadius - adjustedZ;
-			circleRadius = Math.sqrt(zHeight * (2 * this.adjustedMinRadius - zHeight));
+			circleRadius = Math.sqrt(
+				Math.pow(this.minRadius, 2) -
+				Math.pow(Math.abs(adjustedZ), 2)
+			);
 
 			out.push(this.generateRotation(circleRadius));
 		}
