@@ -34,7 +34,7 @@ define(['vox/Shape/BaseShape'], function(BaseShape) {
 
 			adjustedZ,
 			circleRadius,
-			zHeight, z;
+			z;
 
 		for (z = 0.5; z < zRadius; z++) {
 
