@@ -37,17 +37,20 @@ define([], function() {
 	SvgLayerRenderer.prototype = {
 
 		generateLayerSvg: function(shape, layerIndex) {
-			var layer, doc, x, y, ySize, xSize, rectClass, bump, thisBump;
+			var layer, doc, x, y, ySize, xSize, rectClass, bump, thisBump, width;
 			if (! shape.hasOwnProperty(layerIndex)) {
 				throw new Error("Invalid layer: `" + layerIndex+ "`");
 			}
 			layer = shape[layerIndex];
 
 			ySize = roundDec((1 / layer.length) * 100, 2);
-			xSize = roundDec((1 / layer[0].length) * 100, 2);
+			width = roundDec(100 * (layer[0].length / layer.length), 2);
+
+			xSize = roundDec((1 / layer[0].length) * width, 2);
 			bump  = roundDec(ySize * this.bumpHeight, 2);
 
-			doc = "<svg  xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 " + (100 + bump)+"\">\n";
+
+			doc = "<svg  xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 "+width+" " + (100 + bump)+"\">\n";
 
 			for (y = 0; y < layer.length; y++) {
 				for (x = 0; x < layer[y].length; x++) {
@@ -66,11 +69,17 @@ define([], function() {
 					}
 
 					if (rectClass !== null) {
-						doc += '<rect class="'+rectClass+'" ' +
-							'y="'+  roundDec((y * ySize) + thisBump, 2)+'" ' +
-							'height="'+ySize+'" ' +
-							'width="'+xSize+'" ' +
-							'x="'+ roundDec((x * xSize), 2) + '" />\n';
+						doc += '<rect class="'+rectClass+'" ';
+						if (rectClass == 'shape') {
+							doc += 'data-x="'+x+'" ';
+							doc += 'data-y="'+y+'" ';
+							doc += 'data-z="'+layerIndex+'" ';
+
+						}
+						doc += 'y="'+  roundDec((y * ySize) + thisBump, 2)+'" ';
+						doc += 'height="'+ySize+'" ';
+						doc += 'width="'+xSize+'" ';
+						doc += 'x="'+ roundDec((x * xSize), 2) + '" />\n';
 					}
 					if (layer[y][x] && (y == layer.length - 1 || ! layer[y+1][x])) {
 						doc += '<rect class="bump" ' +
