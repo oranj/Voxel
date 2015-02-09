@@ -32,17 +32,15 @@ define(['vox/Shape/BaseShape'], function(BaseShape) {
 		var out = [],
 			zRadius = (this.height - 1) / 2,
 			realZRadius = this.height / 2,
-			zFactor = realZRadius / this.adjustedMinRadius,
+			zFactor = zRadius / this.adjustedMinRadius,
 
 			adjustedZ,
 			circleRadius,
 			z;
 
 		for (z = -zRadius; z <= zRadius; z++) {
-
 			adjustedZ = Math.abs(z / zFactor);
-			circleRadius = Math.sqrt(
-				Math.pow(this.adjustedMinRadius, 2) - Math.pow(Math.abs(adjustedZ), 2));
+			circleRadius = Math.sqrt(Math.pow(this.adjustedMinRadius + 0.5, 2) - Math.pow(adjustedZ, 2));
 
 			out.push(this.generateRotation(circleRadius));
 		}
