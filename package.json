@@ -1,16 +1,32 @@
 {
   "name": "Voxel",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "3D Voxel generating library",
   "author": {
     "name": "Ray Minge",
     "email": "ray@rayminge.com"
   },
+  "types": "./dist/voxel.min.d.ts",
+	"main": "./dist/voxel.min.js",
+	"typings": "./dist/voxel.min.d.ts",
+	"module": "./dist/voxel.min.js",
+	"scripts": {
+		"lint": "tslint -c tslint.json 'src/**/*.ts'",
+		"fix": "tslint -c tslint.json 'src/**/*.ts' --fix",
+		"build": "tsc",
+		"validate": "npm run fix && npm run build",
+		"preversion": "npm run validate",
+		"version": "git add -A dist src",
+		"postversion": "git push && git push --tags",
+		"watch": "tsc -w"
+	},
   "dependencies": {
     "grunt": "~0.4.5",
-    "grunt-jslint": "~1.1.11",
+    "grunt-contrib-requirejs": "~0.4.0",
     "grunt-digestif": "~0.1.0",
-    "grunt-contrib-requirejs": "~0.4.0"
+    "grunt-jslint": "~1.1.11",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.3"
   },
   "readme": "# Voxels\n\nThey are your friend.\n\nWe have **shapes** and **renderers**.\n\nExample.\n\n```js\n\nrequire.config({\n\tbaseUrl: '/js/app/',\n\tpaths: {\n\t\tvox: '/js/vox-lib/src'\n\t}\n});\n\nrequire(\n\t['vox/Renderer/CanvasRenderer', 'vox/Shape/Bezier'],\n\tfunction(CanvasRenderer, Bezier) {\n\n\t\tvar canvasElement = document.getElementById('renderCanvas');\n\n\t\tvar shape = new Bezier(40, 40, 100, 1.5,\n\t\t\t\t[0, 0.35, .69, 1],\n\t\t\t\t[0, 0.97, 0.09, 1],\n\t\t\t\t'x'\n\t\t\t),\n\n\t\t\trenderer = new CanvasRenderer(\n\t\t\t\tcanvasElement, 12,\n\t\t\t\t'#1E527D',\n\t\t\t\t'#6795BA',\n\t\t\t\t'#26679c'\n\t\t\t);\n\t\t\tresults = shape.generate3d();\n\n\t\trenderer.render(results);\n\n\t}\n);\n\n```\n\n![](http://oranj.io/uploads/voxel/Screen%20Shot%202014-10-01%20at%201.15.07%20AM.png)\n",
   "readmeFilename": "README.md",

@@ -1,5 +1,10 @@
-define(['vox/Shape/BaseShape'], function(BaseShape) {
-	"use strict";
+import BaseShape from "./BaseShape";
+import { Shape3D } from "./ShapeInterface";
+
+export default class Dome extends BaseShape {
+
+	private minRadius: number;
+	private adjustedMinRadius: number;
 
 	/**
 	 * Constructs a Dome object
@@ -10,36 +15,35 @@ define(['vox/Shape/BaseShape'], function(BaseShape) {
 	 * @param {number} height         The height of the shape
 	 * @param {number|null} thickness The thickness of the shape, or undefined if hollow
 	 */
-	var Dome = function(width, depth, height, thickness) {
-		BaseShape.call(this, width, depth, height, thickness);
+	constructor(
+		width: number,
+		depth: number,
+		height: number,
+		thickness?: number
+	) {
+		super(width, depth, height, thickness);
 
-		var minDimension = Math.min(this.width, this.depth);
+		const minDimension = Math.min(this.width, this.depth);
 
 		this.minRadius = minDimension / 2;
 		this.adjustedMinRadius = (minDimension - 1) / 2;
-	};
+	}
 
-	Dome.prototype = Object.create(BaseShape.prototype);
 	/**
 	 * Generates a 3d matrix of booleans indicating if the cell is occupied
 	 *
 	 * @this {Dome}
 	 * @return {Boolean[][][]}
 	 */
-	Dome.prototype.generate3d = function() {
-		var out = [],
-			zRadius = this.height,
+	generate3d(): Shape3D {
+		const out: Shape3D = [];
+		const zRadius = this.height;
+		const zFactor = zRadius / this.adjustedMinRadius;
 
-			zFactor = zRadius / this.adjustedMinRadius,
+		for (let z = 0.5; z < zRadius; z++) {
 
-			adjustedZ,
-			circleRadius,
-			z;
-
-		for (z = 0.5; z < zRadius; z++) {
-
-			adjustedZ = Math.abs(z / zFactor);
-			circleRadius = Math.sqrt(
+			const adjustedZ = Math.abs(z / zFactor);
+			const circleRadius = Math.sqrt(
 				Math.pow(this.minRadius, 2) -
 				Math.pow(Math.abs(adjustedZ), 2)
 			);
@@ -47,8 +51,5 @@ define(['vox/Shape/BaseShape'], function(BaseShape) {
 			out.push(this.generateRotation(circleRadius));
 		}
 		return out;
-	};
-
-	return Dome;
-
-});
+	}
+}

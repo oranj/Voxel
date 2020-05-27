@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+      "lib": [ "es5", "dom", "es2017" ],
+      "module": "amd",
+      "target": "es5",
+      "declaration": true,
+      "composite": true,
+      "outFile": "dist/voxel.min.js",
+      "noImplicitAny": true,
+      "noUnusedLocals": true,
+      "sourceMap": true,
+      "strict": true,
+      "allowJs": false,
+      "rootDir": "./src"
+  },
+  "include": [
+      "src/**/*.ts"
+  ],
+  "exclude": [
+      "node_modules/",
+      "Gruntfile.js"
+  ]
+}

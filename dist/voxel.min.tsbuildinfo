@@ -1,0 +1,49 @@
+{
+  "bundle": {
+    "commonSourceDirectory": "../src",
+    "sourceFiles": [
+      "../src/voxel/General/BinomialCoefficient.ts",
+      "../src/voxel/General/BezierFunction.ts",
+      "../src/voxel/Shape/ShapeInterface.ts",
+      "../src/voxel/Renderer/CanvasRenderer.ts",
+      "../src/voxel/Renderer/ConsoleRenderer.ts",
+      "../src/voxel/Renderer/SvgLayerRenderer.ts",
+      "../src/voxel/Shape/BaseShape.ts",
+      "../src/voxel/Shape/Bezier.ts",
+      "../src/voxel/Shape/Cone.ts",
+      "../src/voxel/Shape/Dome.ts",
+      "../src/voxel/Shape/Sphere.ts",
+      "../src/Voxel.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 585,
+          "kind": "emitHelpers",
+          "data": "typescript:extends"
+        },
+        {
+          "pos": 586,
+          "end": 33250,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:extends"
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 14688,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "version": "3.9.3"
+}
