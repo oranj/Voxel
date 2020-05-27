@@ -43,7 +43,7 @@ export default class SvgLayerRenderer {
 		const xSize = roundDec((1 / layer[0].length) * width, 2);
 		const bump  = roundDec(ySize * this.bumpHeight, 2);
 
-		let doc = "<svg  xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 "+width+" " + (100 + bump)+"\">\n";
+		let doc = "<svg  xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 " + width + " " + (100 + bump) + "\">\n";
 
 		for (let y = 0; y < layer.length; y++) {
 			for (let x = 0; x < layer[y].length; x++) {
@@ -62,17 +62,17 @@ export default class SvgLayerRenderer {
 				}
 
 				if (rectClass !== null) {
-					doc += '<rect class="'+rectClass+'" ';
-					if (rectClass == 'shape') {
-						doc += 'data-x="'+x+'" ';
-						doc += 'data-y="'+y+'" ';
-						doc += 'data-z="'+layerIndex+'" ';
+					doc += '<rect class="' + rectClass + '" ';
+					if (rectClass == "shape") {
+						doc += 'data-x="' + x + '" ';
+						doc += 'data-y="' + y + '" ';
+						doc += 'data-z="' + layerIndex + '" ';
 
 					}
-					doc += 'y="'+  roundDec((y * ySize) + thisBump, 2)+'" ';
-					doc += 'height="'+ySize+'" ';
-					doc += 'width="'+xSize+'" ';
-					doc += 'x="'+ roundDec((x * xSize), 2) + '" />\n';
+					doc += 'y="' +  roundDec((y * ySize) + thisBump, 2) + '" ';
+					doc += 'height="' + ySize + '" ';
+					doc += 'width="' + xSize + '" ';
+					doc += 'x="' + roundDec((x * xSize), 2) + '" />\n';
 				}
 				if (layer[y][x] && (y == layer.length - 1 || ! layer[y + 1][x])) {
 					doc += '<rect class="bump" ' +
