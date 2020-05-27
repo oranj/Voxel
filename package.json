@@ -1,25 +1,25 @@
 {
   "name": "voxel",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "3D Voxel generating library",
   "author": {
     "name": "Ray Minge",
     "email": "ray@rayminge.com"
   },
   "types": "./dist/voxel.min.d.ts",
-	"main": "./dist/voxel.min.js",
-	"typings": "./dist/voxel.min.d.ts",
-	"module": "./dist/voxel.min.js",
-	"scripts": {
-		"lint": "tslint -c tslint.json 'src/**/*.ts'",
-		"fix": "tslint -c tslint.json 'src/**/*.ts' --fix",
-		"build": "tsc",
-		"validate": "npm run fix && npm run build",
-		"preversion": "npm run validate",
-		"version": "git add -A dist src",
-		"postversion": "git push && git push --tags",
-		"watch": "tsc -w"
-	},
+  "main": "./dist/voxel.min.js",
+  "typings": "./dist/voxel.min.d.ts",
+  "module": "./dist/voxel.min.js",
+  "scripts": {
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "fix": "tslint -c tslint.json 'src/**/*.ts' --fix",
+    "build": "tsc",
+    "validate": "npm run fix && npm run build",
+    "preversion": "npm run validate",
+    "version": "git add -A dist src",
+    "postversion": "git push && git push --tags",
+    "watch": "tsc -w"
+  },
   "dependencies": {
     "grunt": "~0.4.5",
     "grunt-contrib-requirejs": "~0.4.0",
