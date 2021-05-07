@@ -21,7 +21,7 @@
     "watch": "tsc -w"
   },
   "dependencies": {
-    "grunt": "~0.4.5",
+    "grunt": "~1.3.0",
     "grunt-contrib-requirejs": "~0.4.0",
     "grunt-digestif": "~0.1.0",
     "grunt-jslint": "~1.1.11",
